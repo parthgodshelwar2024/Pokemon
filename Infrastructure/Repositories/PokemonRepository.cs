@@ -18,11 +18,12 @@ namespace Infrastructure.Repositories
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IEnumerable<PokemonDetailDto>> GetPokemonsAsync(int limit)
+        public async Task<IEnumerable<PokemonDetailDto>> GetPokemonsAsync(int limit, int? pageNumber=0)
         {
             var client = _httpClientFactory.CreateClient("PokeApi");
+            var offset = limit * pageNumber;
 
-            var response = await client.GetAsync($"pokemon?limit={limit}");
+            var response = await client.GetAsync($"pokemon?limit={limit}&offset={offset}");
             response.EnsureSuccessStatusCode();
 
             using var stream = await response.Content.ReadAsStreamAsync();
@@ -32,7 +33,7 @@ namespace Infrastructure.Repositories
 
             var tasks = results.EnumerateArray().Select(async item =>
             {
-                var detailResponse = await client.GetAsync(item.GetProperty("name").GetString());
+                var detailResponse = await client.GetAsync($"pokemon/{item.GetProperty("name").GetString()}");
                 detailResponse.EnsureSuccessStatusCode();
 
                 using var detailStream = await detailResponse.Content.ReadAsStreamAsync();

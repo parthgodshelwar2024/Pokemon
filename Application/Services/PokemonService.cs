@@ -20,15 +20,15 @@ namespace Application.Services
             _cache = cache;
         }
 
-        public async Task<IEnumerable<PokemonDetailDto>> GetPokemonsAsync(string organization)
+        public async Task<IEnumerable<PokemonDetailDto>> GetPokemonsAsync(string organization, int pageNumber)
         {
-            var cacheKey = $"org:{organization}:pokemons:list";
+            var cacheKey = $"org:{organization}:pokemons:list-page{pageNumber}";
 
             var cached = await _cache.GetAsync<IEnumerable<PokemonDetailDto>>(cacheKey);
             if (cached != null)
                 return cached;
-
-            var pokemons = await _repository.GetPokemonsAsync(MaxLimit);
+            
+            var pokemons = await _repository.GetPokemonsAsync(MaxLimit, pageNumber);
 
             await _cache.SetAsync(
                 cacheKey,

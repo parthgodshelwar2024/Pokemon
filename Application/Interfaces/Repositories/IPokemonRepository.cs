@@ -9,7 +9,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IPokemonRepository
     {
-        Task<IEnumerable<PokemonDetailDto>> GetPokemonsAsync(int limit);
+        Task<IEnumerable<PokemonDetailDto>> GetPokemonsAsync(int limit,int? pageNumber);
         Task<PokemonSearchDto?> GetPokemonAsync(string idOrName);
     }
     
