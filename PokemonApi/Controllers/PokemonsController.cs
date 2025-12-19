@@ -68,5 +68,22 @@ namespace PokemonApi.Controllers
                     "Search completed",
                     CorrelationId));
         }
+
+        /// <summary>
+        /// Generate AI story for a pokemon
+        /// </summary>
+        [HttpGet("{name}/story")]
+        [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+        public async Task<IActionResult> GetPokemonStory(string name)
+        {
+            var story = await _pokemonService.GetPokemonStoryAsync(
+                Organization,
+                name);
+
+            return Ok(ApiResponse<string>.SuccessResponse(
+                story,
+                "Story generated successfully",
+                CorrelationId));
+        }
     }
 }
