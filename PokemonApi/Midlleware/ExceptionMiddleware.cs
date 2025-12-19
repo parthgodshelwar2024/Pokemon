@@ -31,7 +31,7 @@ namespace PokemonApi.Midlleware
                 context.Response.ContentType = "application/json";
 
                 var response = ApiResponse<string>.Failure(
-                    "An unexpected error occurred",
+                    $"An unexpected error occurred, {ex.Message}",
                     correlationId);
 
                 await context.Response.WriteAsJsonAsync(response);

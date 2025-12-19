@@ -4,6 +4,15 @@ using PokemonApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+var openRouterKey = Environment.GetEnvironmentVariable("OPENROUTER_API_KEY");
+
+builder.Configuration["AI:OpenAiApiKey"] =
+    Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
+builder.Configuration["AI:OpenRouterApiKey"] =
+    Environment.GetEnvironmentVariable("OPENROUTER_API_KEY");
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -13,7 +22,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 builder.Services.AddHttpClients(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
+//builder.Services.AddOpenAi(builder.Configuration);
+builder.Services.AddAi(builder.Configuration);
 builder.Services.AddApplicationServices();
+
 
 
 var app = builder.Build();
