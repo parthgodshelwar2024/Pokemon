@@ -9,5 +9,10 @@ namespace Application.Interfaces.Services
             string organization,
             string? id,
             string? name);
-    }
+
+        Task<string> GetPokemonStoryAsync(
+            string organization,
+            string name);
+        
+        }
 }
