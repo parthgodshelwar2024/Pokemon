@@ -60,6 +60,7 @@ setup Redis connection string in appsettings.json:
     "Redis": "localhost:6379"
   }
   ```
+- Thankyou
 
 
 ## How to run the project
