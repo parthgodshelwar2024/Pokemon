@@ -11,13 +11,36 @@ namespace Application.Services
 
         private readonly IPokemonRepository _repository;
         private readonly ICacheService _cache;
+        private readonly IAiStoryService _aiStoryService;
 
         public PokemonService(
             IPokemonRepository repository,
-            ICacheService cache)
+            ICacheService cache,
+            IAiStoryService aiStoryService)
         {
             _repository = repository;
             _cache = cache;
+            _aiStoryService = aiStoryService;
+        }
+
+        public async Task<string> GetPokemonStoryAsync(
+            string organization,
+            string name)
+        {
+            var cacheKey = $"org:{organization}:pokemon:{name}:story";
+
+            var cached = await _cache.GetAsync<string>(cacheKey);
+            if (cached != null)
+                return cached;
+
+            var story = await _aiStoryService.GenerateStoryAsync(name);
+
+            await _cache.SetAsync(
+                cacheKey,
+                story,
+                TimeSpan.FromHours(1));
+
+            return story;
         }
 
         public async Task<IEnumerable<PokemonDetailDto>> GetPokemonsAsync(string organization, int pageNumber)
